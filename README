@@ -1,1 +1,19 @@
 9th (public) place solution to MeLi Data Challenge 2020
+
+This is a very simple solution:
+
+The most important model is XGBoost. Stacking with the Neural Network only (barely) flipped my place from 10th to 9th.
+
+1. Run 0_parquet.ipynb to save the original files as parquet and make the loading faster.
+2. Run 1a_prep_sbert_neuralmind.ipynb to generate sentence embeddings (using a PT-BR fine-tuned BERT provided by neuralmind) and a KNN index based on this data.
+3. Run 1b_prep_ltr_knn_search.ipynb to "melt" the original data and add nearest neighbors. Basically create one row for each candidate item (viewed items + 50 nearest neighbors based on both views and search embeddings from last step)
+4. Run 2a_xgb_ranker_knn_neuralmind.ipynb to create a minimal feature set, transform the target into a ranking, save the data for reuse and train a rank:pairwise XGBoost.
+5. Run 2b_embbag_nums_yrank_mse.ipynb to create a neural network that takes both features from the previous dataset and the sentence embeddings. To be faster I trained it over the same target, but using MSE (surprisingly not as bad as I thought).
+6. Run 3_stack.ipynb to load the previous models predictions and create a XGB to stack them into final predictions.
+
+Subs are named 22c, 26, etc because these were the original notebook names as I was naming them in a sequence to organize the progress.
+
+Thanks for organizing this competition and preparing a very practical, real-world dataset :)
+
+
+
